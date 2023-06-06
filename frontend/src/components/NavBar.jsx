@@ -1,6 +1,6 @@
 import React from 'react'
 import '../index.css'
-
+import {GiHamburgerMenu} from 'react-icons/gi'
 
 const NavBar = () => {
   const [navbarOpen, setNavbarOpen] = React.useState(false)
@@ -21,7 +21,7 @@ const NavBar = () => {
               type='button'
               onClick={() => setNavbarOpen(!navbarOpen)}
             >
-              <i className='fas fa-bars'></i>
+              <GiHamburgerMenu />
             </button>
           </div>
           <div
@@ -31,23 +31,41 @@ const NavBar = () => {
             }
             id='example-navbar-danger'
           >
-            <ul className='flex flex-col lg:flex-row list-none lg:ml-auto'>
+            <ul className='flex flex-col lg:flex-row list-none ml-8'>
               <li className='nav-item'>
                 <a
-                  className='px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75'
+                  className='px-3 py-2 flex items-center text-xm uppercase font-bold leading-snug text-white hover:opacity-75'
                   href='#'
                 >
                   <i className='fab fa-facebook-square text-lg leading-lg text-white opacity-75'></i>
-                  <span className='ml-2'>Register</span>
+                  <span className='ml-2'>Home</span>
                 </a>
               </li>
               <li className='nav-item'>
                 <a
-                  className='px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75'
-                  href='#pablo'
+                  className='px-3 py-2 flex items-center text-xm uppercase font-bold leading-snug text-white hover:opacity-75'
+                  href='#'
+                >
+                  <i className='fab fa-facebook-square text-lg leading-lg text-white opacity-75'></i>
+                  <span className='ml-2'>Services</span>
+                </a>
+              </li>
+              <li className='nav-item'>
+                <a
+                  className='px-3 py-2 flex items-center text-xm uppercase font-bold leading-snug text-white hover:opacity-75'
+                  href='#'
                 >
                   <i className='fab fa-twitter text-lg leading-lg text-white opacity-75'></i>
-                  <span className='ml-2'>Log in</span>
+                  <span className='ml-2'>About</span>
+                </a>
+              </li>
+              <li className='nav-item'>
+                <a
+                  className='px-3 py-2 flex items-center text-xm uppercase font-bold leading-snug text-white hover:opacity-75'
+                  href='#'
+                >
+                  <i className='fab fa-twitter text-lg leading-lg text-white opacity-75'></i>
+                  <span className='ml-2'>Contact Us</span>
                 </a>
               </li>
             </ul>
