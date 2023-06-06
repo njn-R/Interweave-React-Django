@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,6 +26,7 @@ SECRET_KEY = 'django-insecure-1p!rsvx6=#py(-8u^#ta%66t(^g+#0m_cy%^ddpo-+t!)r)5v)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
 
 ALLOWED_HOSTS = []
 
@@ -77,8 +80,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'hT9ElGJlOXHHrwn5lBUx',
+        'USER': config('USER'),
+        'PASSWORD': config('PASSWORD'),
         'HOST': 'containers-us-west-14.railway.app',
         'PORT': '6863',
     }
@@ -125,3 +128,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Load environment variables from .env file
+# config_path = os.path.join(BASE_DIR, '.env')
+# config.setup()
