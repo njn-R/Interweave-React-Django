@@ -129,6 +129,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Load environment variables from .env file
-# config_path = os.path.join(BASE_DIR, '.env')
-# config.setup()
