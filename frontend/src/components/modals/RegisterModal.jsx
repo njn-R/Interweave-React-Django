@@ -1,13 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { hideRegisterModal } from '../../slices/uiSlice'
+import axios from 'axios'
+
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+axios.defaults.withCredentials = true
+
+const client = axios.create({
+  baseURL: 'http://127.0.0.1:8000',
+})
 
 const RegisterModal = () => {
   const dispatch = useDispatch()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value)
+  }
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value)
+  }
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value)
+  }
 
   const handleHideRegisterModal = () => {
     dispatch(hideRegisterModal())
   }
+
+  const handleRegister = (e) => {
+    e.preventDefault()
+    console.log(email, username, password)
+    client
+      .post('/users/register', {
+        email: email,
+        username: username,
+        password: password,
+      })
+      .then(function (res) {
+        dispatch(hideRegisterModal())
+        console.log(res)
+      })
+  }
+
   return (
     <>
       <>
@@ -49,6 +89,8 @@ const RegisterModal = () => {
                             id='email-address'
                             name='email'
                             type='email'
+                            value={email}
+                            onChange={handleEmailChange}
                             autoComplete='email'
                             required
                             className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
@@ -62,6 +104,8 @@ const RegisterModal = () => {
                           <input
                             id='username'
                             name='username'
+                            value={username}
+                            onChange={handleUsernameChange}
                             type='text'
                             required
                             className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
@@ -76,6 +120,8 @@ const RegisterModal = () => {
                             id='password'
                             name='password'
                             type='password'
+                            value={password}
+                            onChange={handlePasswordChange}
                             autoComplete='current-password'
                             required
                             className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
@@ -92,7 +138,7 @@ const RegisterModal = () => {
                 <button
                   className='bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                   type='button'
-                  onClick={handleHideRegisterModal}
+                  onClick={handleRegister}
                 >
                   Register
                 </button>

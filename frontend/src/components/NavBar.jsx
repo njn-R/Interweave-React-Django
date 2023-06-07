@@ -1,9 +1,41 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../index.css'
-import {GiHamburgerMenu} from 'react-icons/gi'
+import { GiHamburgerMenu } from 'react-icons/gi'
+import { useSelector, useDispatch } from 'react-redux'
+import { setCurrentUser, currentUserLogout } from '../slices/uiSlice'
+
+import axios from 'axios'
+
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+axios.defaults.withCredentials = true
+
+const client = axios.create({
+  baseURL: 'http://127.0.0.1:8000',
+})
 
 const NavBar = () => {
   const [navbarOpen, setNavbarOpen] = React.useState(false)
+  const currentUser = useSelector((state) => state.ui.currentUser)
+  console.log('Current User=', currentUser)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    client
+      .get('/users/user')
+      .then(function (res) {
+        dispatch(setCurrentUser())
+      })
+      .catch(function (error) {
+        console.log('Not logged in')
+      })
+  }, [])
+
+  const handleLogout = () => {
+    client.post('/users/logout').then(function (res) {
+      dispatch(currentUserLogout())
+    })
+  }
 
   return (
     <>
@@ -69,6 +101,30 @@ const NavBar = () => {
                 </a>
               </li>
             </ul>
+
+            {currentUser && (
+              <ul className='flex flex-col lg:flex-row list-none ml-auto'>
+                <li className='nav-item'>
+                  <a
+                    className='px-3 py-2 flex items-center text-xm uppercase font-bold leading-snug text-white hover:opacity-75'
+                    href='#'
+                  >
+                    <i className='fab fa-facebook-square text-lg leading-lg text-white opacity-75'></i>
+                    <span className='ml-2'>Logged in</span>
+                  </a>
+                </li>
+                <li className='nav-item'>
+                  <a
+                    className='px-3 py-2 flex items-center text-xm uppercase font-bold leading-snug text-white hover:opacity-75'
+                    href='#'
+                  >
+                    <i className='fab fa-facebook-square text-lg leading-lg text-white opacity-75'></i>
+                    <span className='ml-2' onClick={handleLogout}>Logout</span>
+                    <button className='rounded-3xl bg-black'></button>
+                  </a>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
       </nav>

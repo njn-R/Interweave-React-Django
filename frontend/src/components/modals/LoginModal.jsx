@@ -1,13 +1,48 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { hideLoginModal } from '../../slices/uiSlice'
+import { hideLoginModal, setCurrentUser } from '../../slices/uiSlice'
+import axios from 'axios'
+
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+axios.defaults.withCredentials = true
+
+const client = axios.create({
+  baseURL: 'http://127.0.0.1:8000',
+})
 
 const LoginModal = () => {
   const dispatch = useDispatch()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value)
+  }
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value)
+  }
 
   const handleHideLoginModal = () => {
     dispatch(hideLoginModal())
   }
+
+  const handleSignIn = (e) => {
+    e.preventDefault()
+    console.log(email, password)
+    client
+      .post('/users/login', {
+        email: email,
+        password: password,
+      })
+      .then(function (res) {
+        dispatch(setCurrentUser())
+        handleHideLoginModal()
+        console.log(res)
+      })
+  }
+
   return (
     <>
       <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
@@ -41,9 +76,11 @@ const LoginModal = () => {
                           Email address
                         </label>
                         <input
-                          id='email-address'
+                          id='email'
                           name='email'
                           type='email'
+                          value={email}
+                          onChange={handleEmailChange}
                           autoComplete='email'
                           required
                           className='appearance-none rounded-none relative block
@@ -62,6 +99,8 @@ const LoginModal = () => {
                           id='password'
                           name='password'
                           type='password'
+                          value={password}
+                          onChange={handlePasswordChange}
                           autoComplete='current-password'
                           required
                           className='appearance-none rounded-none relative block
@@ -109,7 +148,7 @@ const LoginModal = () => {
               <button
                 className='bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                 type='button'
-                onClick={handleHideLoginModal}
+                onClick={handleSignIn}
               >
                 Sign in
               </button>

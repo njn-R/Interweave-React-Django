@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,6 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# CORS_ORIGIN_ALLOW_ALL = True #Not recommended for production
+CORS_ALLOWED_ORIGINS = [ 'http://localhost:3000', 'http://127.0.0.1:5173']
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
@@ -38,11 +40,16 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.messages',
+    'django.contrib.sessions',
     'django.contrib.staticfiles',
-    'users'
+    'rest_framework',
+    'corsheaders',
+    'users.apps.UsersConfig',
 ]
 
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -85,6 +92,20 @@ DATABASES = {
         'HOST': 'containers-us-west-14.railway.app',
         'PORT': '6863',
     }
+}
+
+##User Model
+AUTH_USER_MODEL = 'users.AppUser'
+
+REST_FRAMEWORK = {
+      'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+
 }
 
 

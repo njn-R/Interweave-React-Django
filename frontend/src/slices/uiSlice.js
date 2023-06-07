@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   loginModalVisible: false,
   registerModalVisible: false,
+  currentUser: false,
 }
 
 const uiSlice = createSlice({
@@ -23,6 +24,12 @@ const uiSlice = createSlice({
     hideRegisterModal: (state) => {
       state.registerModalVisible = false
     },
+    setCurrentUser: (state) => {
+      state.currentUser = true
+    },
+    currentUserLogout: (state) => {
+      state.currentUser = false
+    }
   },
 })
 
@@ -31,5 +38,7 @@ export const {
   hideLoginModal,
   showRegisterModal,
   hideRegisterModal,
+  setCurrentUser,
+  currentUserLogout
 } = uiSlice.actions
 export default uiSlice.reducer

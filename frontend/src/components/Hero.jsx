@@ -6,9 +6,11 @@ import { showLoginModal, showRegisterModal } from '../slices/uiSlice'
 
 export const Hero = () => {
   const loginModalVisible = useSelector((state) => state.ui.loginModalVisible)
+  const currentUser = useSelector((state) => state.ui.currentUser)
   const registerModalVisible = useSelector(
     (state) => state.ui.registerModalVisible
   )
+
   const dispatch = useDispatch()
 
   const handleShowLoginModal = () => {
@@ -42,24 +44,25 @@ export const Hero = () => {
               Ship products 5-10x faster with your existing design tools, tech
               stacks & workflows!
             </p>
-            <div className='flex justify-center mx-auto'>
-              <button
-                className='hover:underline bg-white text-gray-800 font-bold rounded-full py-4 px-8'
-                onClick={handleShowRegisterModal}
-              >
-                Register
-              </button>
-              <button
-                className='ml-4 hover:underline bg-white text-gray-800 font-bold rounded-full  py-4 px-8'
-                onClick={handleShowLoginModal}
-              >
-                Sign In
-              </button>
-            </div>
+            {!currentUser && (
+              <div className='flex justify-center mx-auto'>
+                <button
+                  className='hover:underline bg-white text-gray-800 font-bold rounded-full py-4 px-8'
+                  onClick={handleShowRegisterModal}
+                >
+                  Register
+                </button>
+                <button
+                  className='ml-4 hover:underline bg-white text-gray-800 font-bold rounded-full  py-4 px-8'
+                  onClick={handleShowLoginModal}
+                >
+                  Sign In
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
-
       {loginModalVisible && <LoginModal />}
       {registerModalVisible && <RegisterModal />}
     </>
